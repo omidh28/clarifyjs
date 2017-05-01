@@ -1,4 +1,4 @@
-import clarify from '../../src/clarifyJs';
+import clarify from '../../src/clarify';
 
 describe('clarify', () => {
   describe('Greet function', () => {
