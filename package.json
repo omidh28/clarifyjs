@@ -53,5 +53,8 @@
   "babelBoilerplateOptions": {
     "entryFileName": "clarifyjs.js",
     "mainVarName": "clarify"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
   }
 }
