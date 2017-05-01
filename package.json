@@ -51,7 +51,7 @@
     "webpack-stream": "3.2.0"
   },
   "babelBoilerplateOptions": {
-    "entryFileName": "clarifyjs.js",
+    "entryFileName": "clarify.js",
     "mainVarName": "clarify"
   },
   "dependencies": {

@@ -1,5 +1,6 @@
 const clarify = {
   greet() {
+    this.omid = new Set();
     return 'hello';
   }
 };
