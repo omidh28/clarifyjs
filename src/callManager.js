@@ -31,7 +31,7 @@ export default class CallManager {
     }
 
     if (isEmpty(this._queue)) {
-      return this._stateContainer.resolve();
+      return this._stateContainer.resolve(previousResult);
     }
 
     const nextRoute = this._queue[0];

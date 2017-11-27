@@ -182,16 +182,16 @@ describe('CallManager', () => {
       expect(thirdToCall.handler.calledAfter(secondToCall.handler)).to.be.true;
     });
 
-    it('should call resolve of final promise when all calls are finished', () => {
+    it('should call resolve of final promise with last result when all calls are finished', () => {
       const firstToCall = {
-        handler: sinon.stub(),
+        handler: spy(() => false),
         priority: 3,
         awaitForHandler: false,
         path: 'somePath'
       };
 
       const secondToCall = {
-        handler: sinon.stub(),
+        handler: spy(() => true),
         priority: 2,
         awaitForHandler: false,
         path: 'anotherPath'
@@ -199,10 +199,11 @@ describe('CallManager', () => {
 
       callManager.schedule(new Route(secondToCall));
       callManager.schedule(new Route(firstToCall));
-      stateContainer.resolve = sinon.spy();
+      stateContainer.resolve = sinon.spy(stateContainer.resolve);
       expect(stateContainer.resolve.notCalled).to.be.true;
       callManager.apply();
       expect(stateContainer.resolve.calledOnce).to.be.true;
+      expect(stateContainer.resolve).to.have.been.calledWith(true);
     });
 
     it('should wait for async handler to finish if awaitForHandler is true', (done) => {
