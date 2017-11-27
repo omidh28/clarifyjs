@@ -134,7 +134,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var callManager = new _callManager2.default({ stateContainer: stateContainer });
 	  var builder = new _builder2.default({ blueprint: blueprint, callManager: callManager });
 	  var route = blueprint.getRoute(currentPath);
-	  return builder.buildRouteInvoker(route)();
+	
+	  for (var _len = arguments.length, handlerArgs = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+	    handlerArgs[_key - 2] = arguments[_key];
+	  }
+	
+	  return builder.buildRouteInvoker.apply(builder, [route].concat(handlerArgs))();
 	}
 
 /***/ },
@@ -9352,8 +9357,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function buildRouteInvoker(route) {
 	      var _this = this;
 	
+	      for (var _len = arguments.length, handlerArgs = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	        handlerArgs[_key - 1] = arguments[_key];
+	      }
+	
 	      return function () {
-	        _this._callManager.schedule(route);
+	        var _callManager;
+	
+	        (_callManager = _this._callManager).schedule.apply(_callManager, [route].concat(handlerArgs));
 	        _this._callManager.deferApplyOnce();
 	        return _this.buildFrom(route.path);
 	      };
