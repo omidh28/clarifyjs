@@ -55,6 +55,7 @@
     "mainVarName": "clarify"
   },
   "dependencies": {
+    "bluebird": "^3.5.0",
     "lodash": "^4.17.4"
   }
 }

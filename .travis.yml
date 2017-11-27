@@ -1,7 +1,7 @@
 language: node_js
 node_js:
-  - "4"
-  - "5"
+  - "8"
+  - "9"
   - "stable"
 sudo: false
 script: "gulp coverage"
