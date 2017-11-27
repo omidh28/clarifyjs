@@ -104,7 +104,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var firstBranches = {};
 	  blueprint.findClosestRoutesToRoot().forEach(function (route) {
 	    if (route.isFunctionStyle()) {
-	      (0, _set2.default)(firstBranches, route.path, (0, _partial2.default)(buildMasterInvoker, blueprint, route.path));
+	      var isAtRoot = route.path === '' ? true : false;
+	      if (isAtRoot) {
+	        firstBranches = (0, _partial2.default)(buildMasterInvoker, blueprint, route.path);
+	      } else {
+	        (0, _set2.default)(firstBranches, route.path, (0, _partial2.default)(buildMasterInvoker, blueprint, route.path));
+	      }
 	    } else {
 	      // NOTE: assumes that root object is always function style
 	      // TODO: move these to a new function, also exists in buildFrom function
@@ -8897,7 +8902,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	
 	      if ((0, _isEmpty2.default)(this._queue)) {
-	        return this._stateContainer.resolve();
+	        return this._stateContainer.resolve(previousResult);
 	      }
 	
 	      var nextRoute = this._queue[0];

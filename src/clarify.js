@@ -12,10 +12,15 @@ module.exports = function ({ routes: routesData }) {
   const blueprint = new Blueprint;
   routes.forEach(route => blueprint.addRoute(route));
   blueprint.handleRoutesWithWildcard();
-  const firstBranches = {};
+  let firstBranches = {};
   blueprint.findClosestRoutesToRoot().forEach(route => {
       if (route.isFunctionStyle()) {
-        set(firstBranches, route.path, partial(buildMasterInvoker, blueprint, route.path))
+        const isAtRoot = route.path === '' ? true : false;
+        if (isAtRoot) {
+          firstBranches = partial(buildMasterInvoker, blueprint, route.path);
+        } else {
+          set(firstBranches, route.path, partial(buildMasterInvoker, blueprint, route.path));
+        }
       } else {
         // NOTE: assumes that root object is always function style
         // TODO: move these to a new function, also exists in buildFrom function
