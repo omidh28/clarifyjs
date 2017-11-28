@@ -319,4 +319,33 @@ describe('CallManager', () => {
       expect(callManager._queue[2].path).to.equal('somePath');
     });
   });
+
+  describe('sortPassedArgumentsByPriority', () => {
+    beforeEach(() => {
+      stateContainer = new StateContainer;
+      callManager = new CallManager({ stateContainer });
+    });
+
+    it('should descending sort call list by their priority', () => {
+      callManager._passedHandlerArgs.push({
+        args: ['second'],
+        priority: 2
+      });
+
+      callManager._passedHandlerArgs.push({
+        args: ['first'],
+        priority: 3
+      });
+
+      callManager._passedHandlerArgs.push({
+        args: ['third'],
+        priority: 1
+      });
+
+      callManager._sortPassedArgumentsByPriority();
+      expect(callManager._passedHandlerArgs[0].args).to.include('first');
+      expect(callManager._passedHandlerArgs[1].args).to.include('second');
+      expect(callManager._passedHandlerArgs[2].args).to.include('third');
+    });
+  });
 });
