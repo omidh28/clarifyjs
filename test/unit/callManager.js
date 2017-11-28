@@ -71,10 +71,10 @@ describe('CallManager', () => {
       };
 
       callManager.schedule(new Route(obj), true, 1, 'string');
-      expect(callManager._passedHandlerArgs[0].length).to.equal(3);
-      expect(callManager._passedHandlerArgs[0][0]).to.equal(true);
-      expect(callManager._passedHandlerArgs[0][1]).to.equal(1);
-      expect(callManager._passedHandlerArgs[0][2]).to.equal('string');
+      expect(callManager._passedHandlerArgs[0].args.length).to.equal(3);
+      expect(callManager._passedHandlerArgs[0].args[0]).to.equal(true);
+      expect(callManager._passedHandlerArgs[0].args[1]).to.equal(1);
+      expect(callManager._passedHandlerArgs[0].args[2]).to.equal('string');
     });
   });
 

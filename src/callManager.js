@@ -16,11 +16,15 @@ export default class CallManager {
 
   schedule(routeSchema, ...handlerArgs) {
     this._queue.push(routeSchema);
-    this._passedHandlerArgs.push([...handlerArgs]);
+    this._passedHandlerArgs.push({
+      priority: routeSchema.priority,
+      args: [...handlerArgs]
+    });
   }
 
   apply() {
     this._sortListByPriority();
+    this._sortPassedArgumentsByPriority();
     this._processNextItem();
   }
 
@@ -42,13 +46,19 @@ export default class CallManager {
       handlerArguments.push(dependency);
     }
 
-    const passedHandlerArgs = this._passedHandlerArgs[0];
+    const passedHandlerArgs = this._passedHandlerArgs[0].args;
     for (const passedArgument of passedHandlerArgs) {
       handlerArguments.push(passedArgument);
     }
 
     const result = nextRoute.handler(...handlerArguments);
+    if (result === 'hello everyone!') {
+      console.log(handlerArguments);
+      console.log('getting it!!');
+    }
+
     this._queue.shift();
+    this._passedHandlerArgs.shift();
     if (awaitForIt && (result instanceof Promise)) {
       result.then((resultAfterPromise) => {
         return this._processNextItem(resultAfterPromise, nextRoute.storeResultAs);
@@ -71,6 +81,20 @@ export default class CallManager {
 
   _sortListByPriority() {
     this._queue.sort((a, b) => {
+      if (a.priority < b.priority) {
+        return 1;
+      }
+
+      if (a.priority > b.priority) {
+        return -1;
+      }
+
+      return 0;
+    });
+  }
+
+  _sortPassedArgumentsByPriority() {
+    this._passedHandlerArgs.sort((a, b) => {
       if (a.priority < b.priority) {
         return 1;
       }

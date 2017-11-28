@@ -139,7 +139,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    handlerArgs[_key - 2] = arguments[_key];
 	  }
 	
-	  return builder.buildRouteInvoker.apply(builder, [route].concat(handlerArgs))();
+	  return builder.buildRouteInvoker(route).apply(undefined, handlerArgs);
 	}
 
 /***/ },
@@ -8883,12 +8883,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        handlerArgs[_key - 1] = arguments[_key];
 	      }
 	
-	      this._passedHandlerArgs.push([].concat(handlerArgs));
+	      this._passedHandlerArgs.push({
+	        priority: routeSchema.priority,
+	        args: [].concat(handlerArgs)
+	      });
 	    }
 	  }, {
 	    key: 'apply',
 	    value: function apply() {
 	      this._sortListByPriority();
+	      this._sortPassedArgumentsByPriority();
 	      this._processNextItem();
 	    }
 	
@@ -8939,7 +8943,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 	
-	      var passedHandlerArgs = this._passedHandlerArgs[0];
+	      var passedHandlerArgs = this._passedHandlerArgs[0].args;
 	      var _iteratorNormalCompletion2 = true;
 	      var _didIteratorError2 = false;
 	      var _iteratorError2 = undefined;
@@ -8966,7 +8970,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	
 	      var result = nextRoute.handler.apply(nextRoute, handlerArguments);
+	      if (result === 'hello everyone!') {
+	        console.log(handlerArguments);
+	        console.log('getting it!!');
+	      }
+	
 	      this._queue.shift();
+	      this._passedHandlerArgs.shift();
 	      if (awaitForIt && result instanceof Promise) {
 	        result.then(function (resultAfterPromise) {
 	          return _this2._processNextItem(resultAfterPromise, nextRoute.storeResultAs);
@@ -9012,6 +9022,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: '_sortListByPriority',
 	    value: function _sortListByPriority() {
 	      this._queue.sort(function (a, b) {
+	        if (a.priority < b.priority) {
+	          return 1;
+	        }
+	
+	        if (a.priority > b.priority) {
+	          return -1;
+	        }
+	
+	        return 0;
+	      });
+	    }
+	  }, {
+	    key: '_sortPassedArgumentsByPriority',
+	    value: function _sortPassedArgumentsByPriority() {
+	      this._passedHandlerArgs.sort(function (a, b) {
 	        if (a.priority < b.priority) {
 	          return 1;
 	        }
@@ -9357,12 +9382,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function buildRouteInvoker(route) {
 	      var _this = this;
 	
-	      for (var _len = arguments.length, handlerArgs = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	        handlerArgs[_key - 1] = arguments[_key];
-	      }
-	
 	      return function () {
 	        var _callManager;
+	
+	        for (var _len = arguments.length, handlerArgs = Array(_len), _key = 0; _key < _len; _key++) {
+	          handlerArgs[_key] = arguments[_key];
+	        }
 	
 	        (_callManager = _this._callManager).schedule.apply(_callManager, [route].concat(handlerArgs));
 	        _this._callManager.deferApplyOnce();

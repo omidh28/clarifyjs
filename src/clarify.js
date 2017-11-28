@@ -45,5 +45,5 @@ function buildMasterInvoker(blueprint, currentPath, ...handlerArgs) {
   const callManager = new CallManager({ stateContainer });
   const builder = new Builder({ blueprint, callManager });
   const route = blueprint.getRoute(currentPath);
-  return builder.buildRouteInvoker(route, ...handlerArgs)();
+  return builder.buildRouteInvoker(route)(...handlerArgs);
 }

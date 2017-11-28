@@ -43,8 +43,8 @@ export default class Builder {
     return finalPromise;
   }
 
-  buildRouteInvoker(route, ...handlerArgs) {
-    return () => {
+  buildRouteInvoker(route) {
+    return (...handlerArgs) => {
       this._callManager.schedule(route, ...handlerArgs);
       this._callManager.deferApplyOnce();
       return this.buildFrom(route.path);
