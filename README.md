@@ -93,7 +93,7 @@ const routesData = [
 ];
 
 const send = clarify({ routes: routesData });
-send('hello everyone!').to('friends').then.log('message has been sent!');
+send('hello everyone!').to('friends').except('john').then.log('message has been sent!');
 ```
 
 [![Travis build status](http://img.shields.io/travis/omidh28/clarifyJs.svg?style=flat)](https://travis-ci.org/omidh28/clarifyJs)
