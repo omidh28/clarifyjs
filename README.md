@@ -21,6 +21,8 @@ The problem is that if "send" method is a async method then the log message will
 
 These features come in price of making the whole process async.
 
+**Note That** ClarifyJs is not intended to wrap your whole code but just endpoints that you want to be called more fluently or want to put a layer of abstract over calling functions and passing arguments.
+
 ---
 
 ## Installation
