@@ -91,7 +91,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	module.exports = function (_ref) {
-	  var routesData = _ref.routes;
+	  var routesData = _ref.routes,
+	      _ref$storage = _ref.storage,
+	      storage = _ref$storage === undefined ? {} : _ref$storage;
 	
 	  var routes = routesData.map(function (routeData) {
 	    return new _route2.default(routeData);
@@ -106,9 +108,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (route.isFunctionStyle()) {
 	      var isAtRoot = route.path === '' ? true : false;
 	      if (isAtRoot) {
-	        firstBranches = (0, _partial2.default)(buildMasterInvoker, blueprint, route.path);
+	        firstBranches = (0, _partial2.default)(buildMasterInvoker, blueprint, route.path, storage);
 	      } else {
-	        (0, _set2.default)(firstBranches, route.path, (0, _partial2.default)(buildMasterInvoker, blueprint, route.path));
+	        (0, _set2.default)(firstBranches, route.path, (0, _partial2.default)(buildMasterInvoker, blueprint, route.path, storage));
 	      }
 	    } else {
 	      // NOTE: assumes that root object is always function style
@@ -119,7 +121,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var parentObject = parentPath ? (0, _get2.default)(firstBranches, parentPath) : firstBranches;
 	      var propertyKey = _builder2.default._getChildPath(route.path);
 	      _builder2.default._attachFunctionToProperty({
-	        functionToAttach: (0, _partial2.default)(buildMasterInvoker, blueprint, route.path),
+	        functionToAttach: (0, _partial2.default)(buildMasterInvoker, blueprint, route.path, storage),
 	        parentObject: parentObject,
 	        propertyKey: propertyKey
 	      });
@@ -129,14 +131,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return firstBranches;
 	};
 	
-	function buildMasterInvoker(blueprint, currentPath) {
-	  var stateContainer = new _stateContainer2.default();
+	function buildMasterInvoker(blueprint, currentPath, storage) {
+	  var stateContainer = new _stateContainer2.default({ defaults: storage });
 	  var callManager = new _callManager2.default({ stateContainer: stateContainer });
 	  var builder = new _builder2.default({ blueprint: blueprint, callManager: callManager });
 	  var route = blueprint.getRoute(currentPath);
 	
-	  for (var _len = arguments.length, handlerArgs = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-	    handlerArgs[_key - 2] = arguments[_key];
+	  for (var _len = arguments.length, handlerArgs = Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
+	    handlerArgs[_key - 3] = arguments[_key];
 	  }
 	
 	  return builder.buildRouteInvoker(route).apply(undefined, handlerArgs);
@@ -8772,6 +8774,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function StateContainer() {
 	    var _this = this;
 	
+	    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+	        _ref$defaults = _ref.defaults,
+	        defaults = _ref$defaults === undefined ? {} : _ref$defaults;
+	
 	    _classCallCheck(this, StateContainer);
 	
 	    this.finalPromise = new Promise(function (resolve, reject) {
@@ -8781,6 +8787,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    this._storage = {};
 	    this._currentPath = '';
+	
+	    Object.keys(defaults).forEach(function (key) {
+	      _this.store(key, defaults[key]);
+	    });
 	  }
 	
 	  _createClass(StateContainer, [{
