@@ -11,7 +11,7 @@ For example we want to filter some of our friends out:
 ```javascript
 send('hello everyone!').to('friends').except('john');
 ```
-Normal javascript methods are executed from left-to-right, So when we reach "expect" filter the message has already been sent to all friends. However ClarifyJs allows to overcome this limitation by allowing to priorities methods to allow execution in any order.
+Normal javascript methods are executed from left-to-right, So when we reach "except" filter the message has already been sent to all friends. However ClarifyJs allows to overcome this limitation by allowing to priorities methods to allow execution in any order.
 
 ClarifyJs also allows controlling async methods. Suppose we want to log a message to console when the message has been sent:
 ```javascript
@@ -93,7 +93,7 @@ const routesData = [
 ];
 
 const send = clarify({ routes: routesData });
-send('hello everyone!').to('friends').then.log('message has been sent!');
+send('hello everyone!').to('friends').except('john').then.log('message has been sent!');
 ```
 
 ### Storage
