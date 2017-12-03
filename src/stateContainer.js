@@ -1,7 +1,7 @@
 import startsWith from 'lodash/startsWith';
 
 export default class StateContainer {
-  constructor() {
+  constructor({ defaults = {} } = {}) {
     this.finalPromise = new Promise((resolve, reject) => {
       this.resolve = resolve;
       this.reject = reject;
@@ -9,6 +9,10 @@ export default class StateContainer {
 
     this._storage = {};
     this._currentPath = '';
+
+    Object.keys(defaults).forEach(key => {
+      this.store(key, defaults[key]);
+    });
   }
 
   resetFinalPromiseProperties() {

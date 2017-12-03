@@ -13,6 +13,17 @@ describe('stateContainer', () => {
       expect(state._storage).to.be.an('object');
     });
 
+    it('should store default given values', () => {
+      const defaults = {
+        someObject: 'someValue',
+        anotherObject: 'anotherValue'
+      };
+
+      state = new StateContainer({ defaults });
+      expect(state.fetch('someObject')).to.equal('someValue');
+      expect(state.fetch('anotherObject')).to.equal('anotherValue');
+    });
+
     it('should create an empty string to store current path', () => {
       expect(state).to.have.property('_currentPath');
       expect(state._currentPath).to.be.a('string');

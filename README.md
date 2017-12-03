@@ -96,6 +96,19 @@ const send = clarify({ routes: routesData });
 send('hello everyone!').to('friends').then.log('message has been sent!');
 ```
 
+### Storage
+
+ClarifyJs has an integrated storage system that can store and pass values to methods.
+These values may also have default values:
+
+```javascript
+const storage = {
+	contacts: 'friends'
+};
+
+const send = clarify({ routes, storage });
+```
+
 [![Travis build status](http://img.shields.io/travis/omidh28/clarifyJs.svg?style=flat)](https://travis-ci.org/omidh28/clarifyJs)
 [![Maintainability](https://api.codeclimate.com/v1/badges/f76a9e87744ce4283c42/maintainability)](https://codeclimate.com/github/omidh28/clarifyjs/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/f76a9e87744ce4283c42/test_coverage)](https://codeclimate.com/github/omidh28/clarifyjs/test_coverage)

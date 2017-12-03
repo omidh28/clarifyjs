@@ -7,7 +7,7 @@ import StateContainer from './stateContainer';
 import CallManager from './callManager';
 import Builder from './builder';
 
-module.exports = function ({ routes: routesData }) {
+module.exports = function ({ routes: routesData, storage = {} }) {
   const routes = routesData.map((routeData) => new Route(routeData));
   const blueprint = new Blueprint;
   routes.forEach(route => blueprint.addRoute(route));
@@ -17,9 +17,9 @@ module.exports = function ({ routes: routesData }) {
       if (route.isFunctionStyle()) {
         const isAtRoot = route.path === '' ? true : false;
         if (isAtRoot) {
-          firstBranches = partial(buildMasterInvoker, blueprint, route.path);
+          firstBranches = partial(buildMasterInvoker, blueprint, route.path, storage);
         } else {
-          set(firstBranches, route.path, partial(buildMasterInvoker, blueprint, route.path));
+          set(firstBranches, route.path, partial(buildMasterInvoker, blueprint, route.path, storage));
         }
       } else {
         // NOTE: assumes that root object is always function style
@@ -30,7 +30,7 @@ module.exports = function ({ routes: routesData }) {
         const parentObject = parentPath ? get(firstBranches, parentPath) : firstBranches;
         const propertyKey = Builder._getChildPath(route.path);
         Builder._attachFunctionToProperty({
-          functionToAttach: partial(buildMasterInvoker, blueprint, route.path),
+          functionToAttach: partial(buildMasterInvoker, blueprint, route.path, storage),
           parentObject,
           propertyKey
         });
@@ -40,8 +40,8 @@ module.exports = function ({ routes: routesData }) {
   return firstBranches;
 };
 
-function buildMasterInvoker(blueprint, currentPath, ...handlerArgs) {
-  const stateContainer = new StateContainer;
+function buildMasterInvoker(blueprint, currentPath, storage, ...handlerArgs) {
+  const stateContainer = new StateContainer({ defaults: storage });
   const callManager = new CallManager({ stateContainer });
   const builder = new Builder({ blueprint, callManager });
   const route = blueprint.getRoute(currentPath);

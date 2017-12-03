@@ -45,4 +45,24 @@ describe('clarify', () => {
     done();
   }, 10);
   });
+
+  it('should store given default storage values', (done) => {
+    const routes = [{
+      path: '',
+      inject: ['someDefaultValue'],
+      handler: spy()
+    }];
+
+    const storage = {
+      someDefaultValue: 1
+    };
+
+    const invoker = clarify({ routes, storage });
+    invoker();
+    setTimeout(() => {
+      expect(routes[0].handler).to.have.been.calledWith(1);
+      done();
+
+    }, 10);
+  });
 });
