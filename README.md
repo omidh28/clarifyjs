@@ -98,8 +98,8 @@ send('hello everyone!').to('friends').except('john').then.log('message has been 
 
 ### Storage
 
-ClarifyJs has an integrated storage system that can store and pass values to methods.
-These values may also have default values:
+ClarifyJs has an integrated storage system that can store and pass objects to methods.
+These objects may also have default values:
 
 ```javascript
 const storage = {
